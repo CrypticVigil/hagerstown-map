@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import '../App.css';
 
 class Sidebar extends Component {
 
 	render() {
-		return <div className='sidebar'>
-			<p>This is my sample text.</p>
-		</div>
+		return (
+			<div id='sidebar' className='Sidebar'>
+				<div id='closeBtn' onClick={this.props.close} >&times;</div>
+				<h1>Hagerstown, MD</h1>
+			</div>
+		)
 	}
 }
 
