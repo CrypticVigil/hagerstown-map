@@ -1,12 +1,24 @@
 import React, { Component } from 'react';
+import scriptLoader from "react-async-script-loader";
 import Sidebar from './Sidebar';
-import Map from './Map';
+import { mapStyles } from '../data/mapStyles';
 import '../App.css';
 
 class App extends Component {
   state = {
-
+    mapLoaded: false
   };
+
+  componentWillReceiveProps() {
+    if (!this.state.mapLoaded) {
+      const map = new window.google.maps.Map(document.getElementById('map'), {
+        center: {lat: 39.615019, lng: -77.702539},
+        zoom: 14,
+        mapTypeControl: false,
+        styles: mapStyles
+      });
+    }
+  }
 
   sidebarToggle = () => {
     document.getElementById('sidebar').classList.toggle('show');
@@ -16,10 +28,14 @@ class App extends Component {
     return (
       <div className="App">
         <Sidebar close={this.sidebarToggle} />
-        <Map open={this.sidebarToggle} />
+        <button id='openBtn' onClick={this.sidebarToggle} >Open Menu</button>
+        <div id='map' className='Map'></div>
       </div>
     );
   }
 }
 
-export default App;
+// export default App;
+export default scriptLoader([
+	`https://maps.googleapis.com/maps/api/js?key=AIzaSyA-5Vwx42DwuoHH7CqTVMFtaJYCAqD9J3s`
+ ])(App);
