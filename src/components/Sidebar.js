@@ -14,7 +14,11 @@ class Sidebar extends Component {
 
 	filterLocations = (event) => {
 		const query = event.target.value.toLowerCase();
-
+		const filtered = locationList.filter(item => {
+			const lowerCase = item.title.toLowerCase();
+			return lowerCase.indexOf(query) > -1;
+		});
+		this.setState({ locations: filtered });
 		this.setState({ inputValue: query });
 	};
 
