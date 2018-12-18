@@ -7,6 +7,7 @@ import '../App.css';
 
 class App extends Component {
   state = {
+    map: null,
     mapLoaded: false
   };
 
@@ -16,7 +17,13 @@ class App extends Component {
         center: {lat: 39.615019, lng: -77.702539},
         zoom: 14,
         mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false,
         styles: mapStyles
+      });
+      this.setState({
+        map,
+        mapLoaded: true
       });
     }
   }
@@ -28,7 +35,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Sidebar close={this.sidebarToggle} />
+        <Sidebar
+          close={this.sidebarToggle} 
+          map={this.state.map}
+          />
         <button id='openBtn' onClick={this.sidebarToggle} >Open Menu</button>
         <div id='map' className='Map'></div>
       </div>

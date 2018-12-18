@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import scriptLoader from "react-async-script-loader";
+import { mapsKey } from '../data/credentials';
 import { locationList } from '../data/locations';
 
 class Sidebar extends Component {
@@ -8,8 +10,15 @@ class Sidebar extends Component {
 		filteredList: null
 	};
 
-	componentDidMount() {
-
+	componentDidUpdate() {
+		locationList.map( (item) => {
+			const marker = new window.google.maps.Marker({
+				position: item.location,
+				map: this.props.map,
+				title: item.title
+			});
+			return marker;
+		});
 	}
 
 	filterLocations = (event) => {
@@ -18,6 +27,9 @@ class Sidebar extends Component {
 			const lowerCase = item.title.toLowerCase();
 			return lowerCase.indexOf(query) > -1;
 		});
+
+		filtered.map();
+
 		this.setState({ locations: filtered });
 		this.setState({ inputValue: query });
 	};
@@ -33,7 +45,7 @@ class Sidebar extends Component {
 				<ul>
 
 					{this.state.locations.map( (item) => {
-						return <li>{item.title}</li>	
+						return <li key={item.key} >{item.title}</li>	
 					})}
 				</ul>
 			</div>
@@ -41,4 +53,7 @@ class Sidebar extends Component {
 	}
 }
 
-export default Sidebar;
+// export default Sidebar;
+export default scriptLoader([
+	`https://maps.googleapis.com/maps/api/js?key=${mapsKey}`
+ ])(Sidebar);
