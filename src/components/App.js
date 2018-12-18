@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import scriptLoader from "react-async-script-loader";
 import Sidebar from './Sidebar';
 import { mapStyles } from '../data/mapStyles';
+import { mapsKey } from '../data/credentials';
 import '../App.css';
 
 class App extends Component {
@@ -37,5 +38,5 @@ class App extends Component {
 
 // export default App;
 export default scriptLoader([
-	`https://maps.googleapis.com/maps/api/js?key=AIzaSyA-5Vwx42DwuoHH7CqTVMFtaJYCAqD9J3s`
+	`https://maps.googleapis.com/maps/api/js?key=${mapsKey}`
  ])(App);
