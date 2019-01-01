@@ -7,30 +7,46 @@ class Sidebar extends Component {
 	state = {
 		inputValue: '',
 		locations: locationList,
-		filteredList: null
+		filtered: locationList
 	};
 
 	componentDidUpdate() {
-		locationList.map( (item) => {
-			const marker = new window.google.maps.Marker({
-				position: item.location,
-				map: this.props.map,
-				title: item.title
+		if (this.state.locations === locationList && this.props.map !== null) {
+			const newLocations = this.state.locations.map( (item) => {
+				item.marker = new window.google.maps.Marker({
+					position: item.location,
+					map: this.props.map,
+					title: item.title
+				});
+				return item;
 			});
-			return marker;
-		});
+
+			this.setState({ locations: newLocations});
+		}
 	}
 
 	filterLocations = (event) => {
 		const query = event.target.value.toLowerCase();
-		const filtered = locationList.filter(item => {
+		const filtered = this.state.locations.filter(item => {
 			const lowerCase = item.title.toLowerCase();
-			return lowerCase.indexOf(query) > -1;
+			const found = lowerCase.indexOf(query) > -1
+			if (!found) {
+				item.marker.setMap(null);
+			} else if (found || query === '') {
+				item.marker.setMap(this.props.map);
+			}
+			return found;
 		});
 
-		filtered.map();
+		// this.state.markers.map( item => {
+		// 	// item.setMap(null);
+		// 	const lowerCase = item.title.toLowerCase();
+		// 	const found = lowerCase.indexOf(query) > -1;
+		// 	item.setMap(found)
+		// 	return item;
+		// })
 
-		this.setState({ locations: filtered });
+		this.setState({ filtered });
 		this.setState({ inputValue: query });
 	};
 
@@ -43,8 +59,7 @@ class Sidebar extends Component {
 				<h1>Hagerstown, MD</h1>
 				<input placeholder='Filter Locations' value={inputValue} onChange={this.filterLocations}/>
 				<ul>
-
-					{this.state.locations.map( (item) => {
+					{this.state.filtered.map( (item) => {
 						return <li key={item.key} >{item.title}</li>	
 					})}
 				</ul>
