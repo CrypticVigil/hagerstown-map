@@ -2,26 +2,68 @@ import React, { Component } from 'react';
 import scriptLoader from "react-async-script-loader";
 import { mapsKey } from '../data/credentials';
 import { locationList } from '../data/locations';
+import foursquareLogo from '../images/foursquare.png';
 
 class Sidebar extends Component {
 	state = {
 		inputValue: '',
 		locations: locationList,
+		markersLoaded: false,
+		foursquareLoaded: false,
 		filtered: locationList
 	};
 
 	componentDidUpdate() {
-		if (this.state.locations === locationList && this.props.map !== null) {
+		const { map } = this.props;
+		if (this.state.locations === locationList && map !== null) {
 			const newLocations = this.state.locations.map( (item) => {
 				item.marker = new window.google.maps.Marker({
 					position: item.location,
-					map: this.props.map,
-					title: item.title
+					map: map,
+					title: item.title,
+					infowindow: new window.google.maps.InfoWindow({
+						content: item.title
+					})
 				});
+				item.marker.addListener('click', function() {
+					item.marker.infowindow.open(map, item.marker);
+				});
+			
 				return item;
 			});
 
 			this.setState({ locations: newLocations});
+			this.setState({ markersLoaded: true});
+		}
+
+		if (this.state.markersLoaded && !this.state.foursquareLoaded) {
+			const foursquareData = this.state.locations.map( (item) => {
+
+				fetch('https://api.foursquare.com/v2/venues/search?ll=' + item.location.lat + ', ' + item.location.lng + '&client_id=DMI2YE0INDUQ3LVK3F0VNB5ZCCPWIVUTJR3LVBVGU40D3TQZ&client_secret=MXASP03WTKJB5HDK4N0TU011RFCTUQPSGKI3RE40INMD1ZRD&v=20180323&limit=3&radius=300&query=' + item.title)
+				.then( response => response.json() )
+				.then( data => {
+					const fsItem = data.response.venues[0];
+					console.log(fsItem);
+		
+					let fsContent = `<div>
+							<h2>${fsItem.name}</h2>
+							<p>${fsItem.location.address || 'Address not found.'}</p>
+						</div>`;
+
+					return fsContent;
+					})
+					.then( data => {
+						item.marker.infowindow = new window.google.maps.InfoWindow({
+							content: data
+						})
+					});
+				// console.log(fsInfo); // Work here on getting the fsInfo data to show up here
+				// item.marker.infowindow.content = fsInfo;
+				return item;
+			});
+
+			this.setState({ foursquareLoaded: true });
+			this.setState({ locations: foursquareData });
 		}
 	}
 
@@ -38,17 +80,18 @@ class Sidebar extends Component {
 			return found;
 		});
 
-		// this.state.markers.map( item => {
-		// 	// item.setMap(null);
-		// 	const lowerCase = item.title.toLowerCase();
-		// 	const found = lowerCase.indexOf(query) > -1;
-		// 	item.setMap(found)
-		// 	return item;
-		// })
-
 		this.setState({ filtered });
 		this.setState({ inputValue: query });
 	};
+
+	listHandler = (event) => {
+		for ( let item of this.state.filtered ) {
+			if ( item.title === event.target.innerHTML ) {
+				item.marker.setAnimation(window.google.maps.Animation.BOUNCE);
+				setTimeout( () => item.marker.setAnimation(null), 2100 )
+			}
+		}
+	}
 
 	render() {
 		const { inputValue } = this.state;
@@ -60,9 +103,16 @@ class Sidebar extends Component {
 				<input placeholder='Filter Locations' value={inputValue} onChange={this.filterLocations}/>
 				<ul>
 					{this.state.filtered.map( (item) => {
-						return <li key={item.key} >{item.title}</li>	
+						return <li 
+							key={item.key} 
+							onClick={this.listHandler}
+							onKeyPress={this.listHandler} 
+							tabIndex={0} 
+							role={'button'} 
+							>{item.title}</li>	
 					})}
 				</ul>
+				<img src={foursquareLogo} alt="Foursquare Logo" />
 			</div>
 		)
 	}
