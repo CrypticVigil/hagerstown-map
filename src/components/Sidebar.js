@@ -47,7 +47,8 @@ class Sidebar extends Component {
 		
 					let fsContent = `<div>
 							<h2>${fsItem.name}</h2>
-							<p>${fsItem.location.address || 'Address not found.'}</p>
+							<p>Type: ${fsItem.categories[0].name}</p>
+							<p>Address: ${fsItem.location.address || 'Address not found.'}</p>
 						</div>`;
 
 					return fsContent;

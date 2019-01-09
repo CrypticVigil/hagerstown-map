@@ -1,44 +1,44 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Neighborhood Map (React)
 
-## Available Scripts
+This project was created for the final project in my [Udacity](https://www.udacity.com/) Front-End Web Developer nanodegree. It uses the Google Maps API along with the Foursquare API to list a number of locations around my hometown of Hagerstown, MD.
 
-In the project directory, you can run:
+## Features
+- A list of locations in my hometown. You can filter them using the filter bar in the sidebar.
+- Click on a marker to see the available information.
+- If you click an entry in the list of locations, it should make that location marker bounce a few times.
 
-### `npm start`
+## Instructions
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+If you have Node.js installed on your computer, you should be able to navigate to the project directory and run the following command in your terminal:
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+```
+npm install
+```
 
-### `npm test`
+After all the dependencies have been installed, you can run this command:
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+npm start
+```
 
-### `npm run build`
+## Production Mode
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+If you want to use the full production mode with a Service Worker, you can create a production build using this command:
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+```
+npm run build
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Then run:
 
-### `npm run eject`
+```
+npm run deploy
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+That will start the app in development mode. If it doesn't load in your browser, you can navigate to [http://localhost:3000](http://localhost:3000).
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Resources
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- [Udacity Project Rubric](https://review.udacity.com/#!/rubrics/1351/view)
+- [Google Maps API Documentation](https://developers.google.com/maps/documentation/javascript/tutorial)
+- [Foursquare API Documentation](https://developer.foursquare.com/docs/api)
